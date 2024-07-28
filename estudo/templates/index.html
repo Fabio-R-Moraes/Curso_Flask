@@ -11,7 +11,8 @@
         <h5>Fábio Moraes</h5>
     </div>
     <div>
-        <p>Bem vindo a aula de Flask... Estude</p>
+        <p>Bem vindo {{usuario}} a aula de Flask... Estude</p>
+        <p>O usuário tem {{context.idade}} anos e mora em {{context.cidade}}!</p>
         <a href="{{ url_for('novapage') }}">Uma nova página</a>
     </div>
 </body>
