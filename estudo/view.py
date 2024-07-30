@@ -62,3 +62,8 @@ def contatoLista():
 
     context = {'dados': dados}
     return render_template("contato_lista.html", context=context)
+
+@app.route('/contato/<int:id>/')
+def contato_detail(id):
+    obj = Contatos.query.get(id)
+    return render_template("contato_detail.html", obj=obj)

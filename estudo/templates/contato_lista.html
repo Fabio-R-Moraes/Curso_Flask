@@ -36,6 +36,7 @@
                                 {% else  %}
                                     <td>Sim</td>
                                 {% endif %}
+                                <td><a href="{{ url_for('contato_detail', id=linha.id) }}"><img src="{{ url_for('static', filename='img/btn.png') }}" style="width: 20px;"></a></td>
                             </tr>
                         {% endfor %}
                     </tbody>
