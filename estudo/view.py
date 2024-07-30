@@ -49,3 +49,16 @@ def contato():
         return redirect(url_for('homepage'))
 
     return render_template("contatos.html", form=form)
+
+@app.route('/contato/lista/')
+def contatoLista():
+    if request.method == 'GET':
+        palavra = request.args.get('pesquisa','')
+
+    dados = Contatos.query.order_by('nome')
+
+    if palavra != '':
+        dados = dados.filter_by(nome=palavra)
+
+    context = {'dados': dados}
+    return render_template("contato_lista.html", context=context)
