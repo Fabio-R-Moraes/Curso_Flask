@@ -1,14 +1,40 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container">
+    {% include 'nav.html' %}
     <div>
         <h3>Estudo em Flask</h3>
         <h5>Fábio Moraes</h5>
     </div>
-
-    {% include 'nav.html' %}
     <div>
         <p>Bem vindo {{usuario}} a aula de Flask... Estude</p>
         <p>O usuário tem {{context.idade}} anos e mora em {{context.cidade}}!</p>
+        <hr>
+        {% if current_user.is_authenticated %}
+            <span class="btn btn-primary">{{ current_user.nome }} {{ current_user.sobrenome }}</span>
+        {% else %}
+            <form action="" method="post" class="row mt-4 p-4 rounde border shadow">
+                <h3>Faça seu login</h3>
+                {{ form.csrf_token }}
+
+                {{ form.email.label() }}
+                {{ form.email(class="form-control") }}
+
+                {{ form.senha.label() }}
+                {{ form.senha(class="form-control") }}
+
+                {{ form.btnSubmit(class="btn btn-primary mt-4 col-12") }}
+
+                <div class="col-12 mt-4">
+                    Não tem cadastro? <a href="{{ url_for('cadastro') }}">Clique aqui e faça o seu Cadastro</a>
+                </div>
+            </form>
+        {% endif %}
+        <div class="mt-4">
+            <a href="{{ url_for('logout') }}" class="btn btn-danger">Sair</a>
+        </div>
+        <hr>
         <img src="{{ url_for('static', filename='img/logo.png') }}">
     </div>
+</div>
 {% endblock %}
