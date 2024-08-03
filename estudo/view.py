@@ -1,7 +1,7 @@
 from estudo import app, db
 from flask import render_template, url_for, request, redirect
-from estudo.models import Contatos
-from estudo.forms import ContatoForm, UserForm,LoginForm
+from estudo.models import Contatos, Post
+from estudo.forms import ContatoForm, UserForm,LoginForm, PostForm
 from flask_login import login_user, logout_user, current_user
 
 @app.route('/', methods=['GET', 'POST'])
@@ -39,6 +39,21 @@ def logout():
 
     return redirect(url_for('homepage'))
 
+@app.route('/post/novo/', methods=['GET', 'POST'])
+def postNovo():
+    form = PostForm()
+    if form.validate_on_submit():
+        form.save(current_user.id)
+        
+        return redirect(url_for('homepage'))
+
+    return render_template("postNovo.html", form=form)
+
+@app.route('/post/lista')
+def postLista():
+    posts = Post.query.all()
+    print(current_user.posts)
+    return render_template("postLista.html", posts=posts)
 
 #Formato INSEGURO, pode ser utilizado mas NÃO é recomendado
 @app.route('/contato_old/', methods=['GET','POST'])
