@@ -2,7 +2,7 @@ from estudo import app, db
 from flask import render_template, url_for, request, redirect
 from estudo.models import Contatos, Post
 from estudo.forms import ContatoForm, UserForm,LoginForm, PostForm, PostComentariosForm
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user, current_user, login_required
 
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
@@ -34,12 +34,14 @@ def cadastro():
     return render_template("cadastro.html", form=form)
 
 @app.route('/sair')
+@login_required
 def logout():
     logout_user()
 
     return redirect(url_for('homepage'))
 
 @app.route('/post/novo/', methods=['GET', 'POST'])
+@login_required
 def postNovo():
     form = PostForm()
     if form.validate_on_submit():
@@ -50,12 +52,14 @@ def postNovo():
     return render_template("postNovo.html", form=form)
 
 @app.route('/post/lista')
+@login_required
 def postLista():
     posts = Post.query.all()
     print(current_user.posts)
     return render_template("postLista.html", posts=posts)
 
 @app.route('/post/<int:id>/', methods=['GET','POST'])
+@login_required
 def postDetail(id):
     post = Post.query.get(id)
     form = PostComentariosForm()
@@ -68,6 +72,7 @@ def postDetail(id):
 
 #Formato INSEGURO, pode ser utilizado mas NÃO é recomendado
 @app.route('/contato_old/', methods=['GET','POST'])
+@login_required
 def contato_old():
     context = {}
     if request.method == 'GET':
@@ -94,6 +99,7 @@ def contato_old():
     return render_template("contatos_old.html", context=context)
 
 @app.route('/contato/', methods=['GET','POST'])
+@login_required
 def contato():
     form = ContatoForm()
 
@@ -104,7 +110,10 @@ def contato():
     return render_template("contatos.html", form=form)
 
 @app.route('/contato/lista/')
+@login_required
 def contatoLista():
+    if(current_user.id == 1): return redirect(url_for('homepage'))
+
     if request.method == 'GET':
         palavra = request.args.get('pesquisa','')
 
@@ -117,6 +126,7 @@ def contatoLista():
     return render_template("contato_lista.html", context=context)
 
 @app.route('/contato/<int:id>/')
+@login_required
 def contato_detail(id):
     obj = Contatos.query.get(id)
     return render_template("contato_detail.html", obj=obj)
