@@ -27,7 +27,8 @@ class Contatos(db.Model):
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     data_criacao = db.Column(db.DateTime, default=datetime.now())
-    mensagem = db.Column(db.String, nullable=True)
+    mensagem = db.Column(db.String, nullable=True, default='default.png')
+    img_post = db.Column(db.String, nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     comentarios = db.relationship('PostComentarios', backref='post', lazy=True)
 
