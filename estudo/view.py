@@ -3,6 +3,7 @@ from flask import render_template, url_for, request, redirect
 from estudo.models import Contatos, Post
 from estudo.forms import ContatoForm, UserForm,LoginForm, PostForm, PostComentariosForm
 from flask_login import login_user, logout_user, current_user, login_required
+from collectionpy.chart.apexcharts import Chart, CND_SRC
 
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
@@ -130,3 +131,22 @@ def contatoLista():
 def contato_detail(id):
     obj = Contatos.query.get(id)
     return render_template("contato_detail.html", obj=obj)
+
+@app.route('/grafico/')
+def exemplo_grafico():
+    x = ['A', 'B', 'C']
+    y = [
+        [10, 20, 30, 40, 50],
+        [14, 50, 74, 5, 63]
+    ]
+
+    y_label = ['Orçado', 'Realizado']
+
+    chart = Chart(x, y, y_label)
+    chart.width = 600
+    chart.foreColor = '191970'
+    chart.background= '00FF00'
+    chart.palette = 1
+    chart.plot_type = 'line'
+
+    return render_template("exemplo_grafico.html", chart=chart, cnd=CND_SRC)
